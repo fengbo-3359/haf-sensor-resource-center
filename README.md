@@ -1,7 +1,7 @@
 # HAF-sensor-sample-example
 
 #### 介绍
-HAF series sensor sample code
+HAF series sensor sample code and testing software
 
 #### 软件架构
 软件架构说明
