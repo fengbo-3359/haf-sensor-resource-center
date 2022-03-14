@@ -1,4 +1,4 @@
-# HAF-sensor-sample-example
+# HAF-sensor-resource-center
 
 #### 介绍
 HAF series sensor sample code and testing software
