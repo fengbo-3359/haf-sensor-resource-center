@@ -52,5 +52,8 @@ Mkfile.old
 dkms.conf
 
 # except testing software and dll
-!HAF_testing_app.exe
+!HAF_testing_app*.exe
 !USB2UARTSPIIICDLL.dll
+
+# ignore sourceinsight folder
+Untitled Project.si4project/
