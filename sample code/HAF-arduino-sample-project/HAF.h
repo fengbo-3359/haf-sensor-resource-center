@@ -29,7 +29,7 @@
 
    Change Logs:
    Date           Author       Notes
-   2022-03-1     fengbo      the first version
+   2022-03-1     fengbo      v1.00, compatible with firmware version v1.05 or before
 
 */
 
@@ -39,6 +39,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define MAJOR_VERSION   1
+#define MINOR_VERSION   0
 
 typedef enum {
   HAF_CMD_GET_SN = 0x01,

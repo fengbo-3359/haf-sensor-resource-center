@@ -9,8 +9,11 @@ void setup()
   senssor.flowOffset = 0;
   Port_I2cInit();
   Serial.begin(9600);
-  Serial.print("I2c addr: 0x");
-  Serial.println(senssor.i2cAddress, HEX);
+  Serial.print("The driver version is ");
+  Serial.print(MAJOR_VERSION, DEC);
+  Serial.print(MINOR_VERSION < 10 ? "0" : "");
+  Serial.print(MINOR_VERSION, DEC);
+  Serial.println("I2c init OK!");
   //suggest warm up time
   delay(50);
 
