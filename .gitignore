@@ -52,7 +52,7 @@ Mkfile.old
 dkms.conf
 
 # except testing software and dll
-!HAF_testing_app*.exe
+!HAF2xDebugV*.exe
 !USB2UARTSPIIICDLL.dll
 
 # ignore sourceinsight folder
