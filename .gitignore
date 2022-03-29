@@ -54,6 +54,8 @@ dkms.conf
 # except testing software and dll
 !HAF2xDebugV*.exe
 !USB2UARTSPIIICDLL.dll
+!AxInterop.AcroPDFLib.dll
+!Interop.AcroPDFLib.dll
 
 # ignore sourceinsight folder
 Untitled Project.si4project/
