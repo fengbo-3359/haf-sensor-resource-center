@@ -30,6 +30,7 @@
    Change Logs:
    Date           Author       Notes
    2022-03-1     fengbo      v1.00, compatible with firmware version v1.05 or before
+   2022-05-1     fengbo      v1.01, compatible with firmware version v1.06 or later
 
 */
 
@@ -41,17 +42,18 @@ extern "C" {
 #endif
 
 #define MAJOR_VERSION   1
-#define MINOR_VERSION   0
+#define MINOR_VERSION   1
 
 typedef enum {
   HAF_CMD_GET_SN = 0x01,
   HAF_CMD_SOFT_RESET = 0x02,
+  HAF_CMD_GET_FLOW = 0x04,
   HAF_CMD_GET_TEMP = 0x05,
+  HAF_CMD_GET_FLOW_TEMP = 0x06,
   HAF_CMD_LOW_POWER = 0x08,
-  HAF_CMD_GET_FACTOR = 0xA1,
+  HAF_CMD_GET_FLOW_MIN = 0xA0,
+  HAF_CMD_GET_FLOW_MAX = 0xA1,
   HAF_CMD_GET_UNIT = 0xA2,
-  HAF_CMD_GET_FLOW = 0xA4,
-  HAF_CMD_GET_FLOW_TEMP = 0xA6,
   HAF_CMD_GET_GAS_TYPE = 0xA7,
   HAF_CMD_GET_GAS_PROPORTION = 0xA8,
   HAF_CMD_SET_GAS_TYPE = 0xA9,
@@ -85,8 +87,8 @@ typedef struct {
   byte sn[4];
   short flow;
   short temp;
-  word flowFactor;
-  short flowOffset;
+  short flowMin;
+  short flowMax;
   HafFlowUnit flowUnit;
   HafGasType gasType;
   word gasProportion;
@@ -94,12 +96,13 @@ typedef struct {
 
 int HAF_GetSn(byte address, byte *sn);
 int HAF_SoftReset(byte address);
-int HAF_GetTemp(byte address, short *v);
-int HAF_LowPower(byte address);
-int HAF_GetFactor(byte address, word *v);
-int HAF_GetUnit(byte address, HafFlowUnit *v);
 int HAF_GetFlow(byte address, short *v);
+int HAF_GetTemp(byte address, short *v);
 int HAF_GetFlowTemp(byte address, short *f, short *t);
+int HAF_LowPower(byte address);
+int HAF_GetFlowMin(byte address, short *v);
+int HAF_GetFlowMax(byte address, short *v);
+int HAF_GetUnit(byte address, HafFlowUnit *v);
 int HAF_GetGasType(byte address, HafGasType *v);
 int HAF_GetGasProportion(byte address, word *v);
 int HAF_SetGasType(byte address, HafGasType v);

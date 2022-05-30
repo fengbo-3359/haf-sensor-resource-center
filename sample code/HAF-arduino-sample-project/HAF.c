@@ -30,6 +30,7 @@
    Change Logs:
    Date           Author       Notes
    2022-03-1     fengbo      v1.00, compatible with firmware version v1.05 or before
+   2022-05-1     fengbo      v1.01, compatible with firmware version v1.06 or later
 
 */
 #include <Arduino.h>
@@ -85,9 +86,9 @@ int HAF_SoftReset(byte address)
   return 0;
 }
 
-int HAF_GetTemp(byte address, short *v)
+int HAF_GetFlow(byte address, short *v)
 {
-  HafCmdCode cmd = HAF_CMD_GET_TEMP;
+  HafCmdCode cmd = HAF_CMD_GET_FLOW;
   byte res[4];
   Port_I2cWrite(address, (byte *)&cmd, 1);
   Port_I2cRead(address, res, 4);
@@ -96,38 +97,9 @@ int HAF_GetTemp(byte address, short *v)
   return 0;
 }
 
-int HAF_LowPower(byte address)
+int HAF_GetTemp(byte address, short *v)
 {
-  HafCmdCode cmd = HAF_CMD_LOW_POWER;
-  Port_I2cWrite(address, (byte *)&cmd, 1);
-  return 0;
-}
-
-int HAF_GetFactor(byte address, word *v)
-{
-  HafCmdCode cmd = HAF_CMD_GET_FACTOR;
-  byte res[4];
-  Port_I2cWrite(address, (byte *)&cmd, 1);
-  Port_I2cRead(address, res, 4);
-  if (HAF_U16CheckSum(res, 2) != HAF_Bytes2uint16(&res[2]))return -1;
-  *v = HAF_Bytes2uint16(res);
-  return 0;
-}
-
-int HAF_GetUnit(byte address, HafFlowUnit *v)
-{
-  HafCmdCode cmd = HAF_CMD_GET_UNIT;
-  byte res[4];
-  Port_I2cWrite(address, (byte *)&cmd, 1);
-  Port_I2cRead(address, res, 4);
-  if (HAF_U16CheckSum(res, 2) != HAF_Bytes2uint16(&res[2]))return -1;
-  *v = (HafFlowUnit)HAF_Bytes2uint16(res);
-  return 0;
-}
-
-int HAF_GetFlow(byte address, short *v)
-{
-  HafCmdCode cmd = HAF_CMD_GET_FLOW;
+  HafCmdCode cmd = HAF_CMD_GET_TEMP;
   byte res[4];
   Port_I2cWrite(address, (byte *)&cmd, 1);
   Port_I2cRead(address, res, 4);
@@ -145,6 +117,46 @@ int HAF_GetFlowTemp(byte address, short *f, short *t)
   if (HAF_U16CheckSum(res, 4) != HAF_Bytes2uint16(&res[4]))return -1;
   *f = (short)HAF_Bytes2uint16(res);
   *t = (short)HAF_Bytes2uint16(&res[2]);
+  return 0;
+}
+
+int HAF_LowPower(byte address)
+{
+  HafCmdCode cmd = HAF_CMD_LOW_POWER;
+  Port_I2cWrite(address, (byte *)&cmd, 1);
+  return 0;
+}
+
+int HAF_GetFlowMin(byte address, short *v)
+{
+  HafCmdCode cmd = HAF_CMD_GET_FLOW_MIN;
+  byte res[4];
+  Port_I2cWrite(address, (byte *)&cmd, 1);
+  Port_I2cRead(address, res, 4);
+  if (HAF_U16CheckSum(res, 2) != HAF_Bytes2uint16(&res[2]))return -1;
+  *v = (short)HAF_Bytes2uint16(res);
+  return 0;
+}
+
+int HAF_GetFlowMax(byte address, short *v)
+{
+  HafCmdCode cmd = HAF_CMD_GET_FLOW_MAX;
+  byte res[4];
+  Port_I2cWrite(address, (byte *)&cmd, 1);
+  Port_I2cRead(address, res, 4);
+  if (HAF_U16CheckSum(res, 2) != HAF_Bytes2uint16(&res[2]))return -1;
+  *v = (short)HAF_Bytes2uint16(res);
+  return 0;
+}
+
+int HAF_GetUnit(byte address, HafFlowUnit *v)
+{
+  HafCmdCode cmd = HAF_CMD_GET_UNIT;
+  byte res[4];
+  Port_I2cWrite(address, (byte *)&cmd, 1);
+  Port_I2cRead(address, res, 4);
+  if (HAF_U16CheckSum(res, 2) != HAF_Bytes2uint16(&res[2]))return -1;
+  *v = (HafFlowUnit)HAF_Bytes2uint16(res);
   return 0;
 }
 

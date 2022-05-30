@@ -6,13 +6,13 @@ void setup()
 {
   // put your setup code here, to run once:
   senssor.i2cAddress = 0x48;
-  senssor.flowOffset = 0;
   Port_I2cInit();
   Serial.begin(9600);
-  Serial.print("The driver version is ");
+  Serial.print("The driver version is V");
   Serial.print(MAJOR_VERSION, DEC);
+  Serial.print(".");
   Serial.print(MINOR_VERSION < 10 ? "0" : "");
-  Serial.print(MINOR_VERSION, DEC);
+  Serial.println(MINOR_VERSION, DEC);
   Serial.println("I2c init OK!");
   //suggest warm up time
   delay(50);
@@ -33,15 +33,23 @@ void setup()
   Serial.print(senssor.sn[3] < 16 ? "0" : "");
   Serial.println(senssor.sn[3], HEX);
 
-  /************************get factor*************************/
-  while (HAF_GetFactor(senssor.i2cAddress, &senssor.flowFactor) != 0)
+  /********************get flow min and max********************/
+  while (HAF_GetFlowMin(senssor.i2cAddress, &senssor.flowMin) != 0)
   {
-    Serial.println("Get factor error!");
+    Serial.println("Get flowMin error!");
+    delay(1000);
   }
-  Serial.print("Factor: ");
-  Serial.println(senssor.flowFactor, DEC);
+  while (HAF_GetFlowMax(senssor.i2cAddress, &senssor.flowMax) != 0)
+  {
+    Serial.println("Get flowMax error!");
+    delay(1000);
+  }
+  Serial.print("Flow min: ");
+  Serial.println(senssor.flowMin, DEC);
+  Serial.print("Flow max: ");
+  Serial.println(senssor.flowMax, DEC);
 
-  //get unit
+  /**************************get unit**************************/
   if (HAF_GetUnit(senssor.i2cAddress, &senssor.flowUnit) != 0)
   {
     Serial.println("Get unit error!");
@@ -66,7 +74,7 @@ void setup()
   }
 
   /*********************set gas proportion**********************/
-  if (HAF_SetGasProportion(senssor.i2cAddress, 1000) != 0)
+  if (HAF_SetGasProportion(senssor.i2cAddress, 100) != 0)
   {
     Serial.println("Set gas proportion error!");
   }
@@ -106,7 +114,7 @@ void setup()
   {
     Serial.print("Gas proportion: ");
     Serial.print(senssor.gasProportion, DEC);
-    Serial.println("‰");
+    Serial.println("%");
   }
 }
 
@@ -121,7 +129,8 @@ void loop()
   else
   {
     Serial.print("Flow: ");
-    Serial.print((float)senssor.flow / senssor.flowFactor, 3);
+    float flow = (senssor.flowMax - senssor.flowMin) * ((float)senssor.flow / 16384 - 0.1) / 0.8 + senssor.flowMin;
+    Serial.print(flow, 3);
     if (senssor.flowUnit == HAF_UNIT_SCCM)
       Serial.print("sccm");
     else if (senssor.flowUnit == HAF_UNIT_SLM)
@@ -130,7 +139,5 @@ void loop()
     Serial.print((float)senssor.temp / 100, 1);
     Serial.println("℃");
   }
-
   delay(1000);
-
 }

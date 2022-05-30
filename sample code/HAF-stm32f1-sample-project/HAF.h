@@ -29,7 +29,8 @@
 
    Change Logs:
    Date           Author       Notes
-   2022-03-20     fengbo      v1.00, compatible with firmware version v1.05 or before
+   2022-03-1     fengbo      v1.00, compatible with firmware version v1.05 or before
+   2022-05-1     fengbo      v1.01, compatible with firmware version v1.06 or later
 
 */
 
@@ -41,18 +42,18 @@ extern "C" {
 #endif
 
 #define MAJOR_VERSION   1
-#define MINOR_VERSION   0
-
+#define MINOR_VERSION   1
 
 typedef enum {
   HAF_CMD_GET_SN = 0x01,
   HAF_CMD_SOFT_RESET = 0x02,
+  HAF_CMD_GET_FLOW = 0x04,
   HAF_CMD_GET_TEMP = 0x05,
+  HAF_CMD_GET_FLOW_TEMP = 0x06,
   HAF_CMD_LOW_POWER = 0x08,
-  HAF_CMD_GET_FACTOR = 0xA1,
+  HAF_CMD_GET_FLOW_MIN = 0xA0,
+  HAF_CMD_GET_FLOW_MAX = 0xA1,
   HAF_CMD_GET_UNIT = 0xA2,
-  HAF_CMD_GET_FLOW = 0xA4,
-  HAF_CMD_GET_FLOW_TEMP = 0xA6,
   HAF_CMD_GET_GAS_TYPE = 0xA7,
   HAF_CMD_GET_GAS_PROPORTION = 0xA8,
   HAF_CMD_SET_GAS_TYPE = 0xA9,
@@ -84,10 +85,10 @@ typedef enum {
 typedef struct {
   uint8_t i2cAddress;
   uint8_t sn[4];
-  int16_t flow;
-  int16_t temp;
-  uint16_t flowFactor;
-  int16_t flowOffset;
+  short flow;
+  short temp;
+  short flowMin;
+  short flowMax;
   HafFlowUnit flowUnit;
   HafGasType gasType;
   uint16_t gasProportion;
@@ -95,12 +96,13 @@ typedef struct {
 
 int HAF_GetSn(uint8_t address, uint8_t *sn);
 int HAF_SoftReset(uint8_t address);
-int HAF_GetTemp(uint8_t address, int16_t *v);
+int HAF_GetFlow(uint8_t address, short *v);
+int HAF_GetTemp(uint8_t address, short *v);
+int HAF_GetFlowTemp(uint8_t address, short *f, short *t);
 int HAF_LowPower(uint8_t address);
-int HAF_GetFactor(uint8_t address, uint16_t *v);
+int HAF_GetFlowMin(uint8_t address, short *v);
+int HAF_GetFlowMax(uint8_t address, short *v);
 int HAF_GetUnit(uint8_t address, HafFlowUnit *v);
-int HAF_GetFlow(uint8_t address, int16_t *v);
-int HAF_GetFlowTemp(uint8_t address, int16_t *f, int16_t *t);
 int HAF_GetGasType(uint8_t address, HafGasType *v);
 int HAF_GetGasProportion(uint8_t address, uint16_t *v);
 int HAF_SetGasType(uint8_t address, HafGasType v);

@@ -93,9 +93,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   // put your setup code here, to run once:
   senssor.i2cAddress = 0x48;
-  senssor.flowOffset = 0;
   Port_I2cInit();
-  printf("The driver version is %d.%02d\r\n",MAJOR_VERSION,MINOR_VERSION);
+  printf("The driver version is V%d.%02d\r\n",MAJOR_VERSION,MINOR_VERSION);
   printf("I2c init OK!\r\n");
   //suggest warm up time
   HAL_Delay(50);
@@ -108,14 +107,21 @@ int main(void)
   }
   printf("SN: %02X%02X%02X%02X\r\n",senssor.sn[0],senssor.sn[1],senssor.sn[2],senssor.sn[3]);
 
-  /************************get factor*************************/
-  while (HAF_GetFactor(senssor.i2cAddress, &senssor.flowFactor) != 0)
+  /********************get flow min and max********************/
+  while (HAF_GetFlowMin(senssor.i2cAddress, &senssor.flowMin) != 0)
   {
-    printf("Get factor error!\r\n");
+    printf("Get flowMin error!\r\n");
+    HAL_Delay(1000);
   }
-  printf("Factor: %d\r\n",senssor.flowFactor);
+  while (HAF_GetFlowMax(senssor.i2cAddress, &senssor.flowMax) != 0)
+  {
+    printf("Get flowMax error!\r\n");
+    HAL_Delay(1000);
+  }
+  printf("Flow min: %d\r\n", senssor.flowMin);
+  printf("Flow max: %d\r\n", senssor.flowMax);
 
-  //get unit
+  /**************************get unit**************************/
   if (HAF_GetUnit(senssor.i2cAddress, &senssor.flowUnit) != 0)
   {
     printf("Get unit error!\r\n");
@@ -139,7 +145,7 @@ int main(void)
   }
 
   /*********************set gas proportion**********************/
-  if (HAF_SetGasProportion(senssor.i2cAddress, 1000) != 0)
+  if (HAF_SetGasProportion(senssor.i2cAddress, 100) != 0)
   {
     printf("Set gas proportion error!\r\n");
   }
@@ -176,7 +182,7 @@ int main(void)
   }
   else
   {
-    printf("Gas proportion: %.1f%\r\n",(float)senssor.gasProportion/10);
+    printf("Gas proportion: %d%\r\n", senssor.gasProportion);
   }
 
   /* USER CODE END 2 */
@@ -196,15 +202,15 @@ int main(void)
     }
     else
     {
+      float flow = (senssor.flowMax - senssor.flowMin) * ((float)senssor.flow / 16384 - 0.1) / 0.8 + senssor.flowMin;
   	  if (senssor.flowUnit == HAF_UNIT_SCCM)
-        printf("Flow: %.3fsccm",(float)senssor.flow / senssor.flowFactor);
+        printf("Flow: %.3fsccm", flow);
 	  else if (senssor.flowUnit == HAF_UNIT_SLM)
-        printf("Flow: %.3fslm",(float)senssor.flow / senssor.flowFactor);
+        printf("Flow: %.3fslm", flow);
       printf("   Temp: %.1f¡æ\r\n",(float)senssor.temp / 100);
     }
-
     HAL_Delay(1000);
-	  }
+  }
   /* USER CODE END 3 */
 }
 

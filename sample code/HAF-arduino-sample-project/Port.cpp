@@ -29,7 +29,7 @@
 
    Change Logs:
    Date           Author       Notes
-   2022-03-1     fengbo      v1.00, compatible with firmware version v1.05 or before
+   2022-03-1     fengbo       init
 
 */
 #include <Arduino.h>
