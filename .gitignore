@@ -57,6 +57,9 @@ dkms.conf
 !testing software/*/*/*
 !testing software/*/*/*/*
 
+# except tools/*
+!tools/*
+
 # ignore sourceinsight folder
 Untitled Project.si4project/
 back up/
