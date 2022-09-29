@@ -129,7 +129,7 @@ void loop()
   else
   {
     Serial.print("Flow: ");
-    float flow = (senssor.flowMax - senssor.flowMin) * ((float)senssor.flow / 16384 - 0.1) / 0.8 + senssor.flowMin;
+    float flow = (senssor.flowMax - senssor.flowMin) * ((float)senssor.flow / 65535 - 0.1) / 0.8 + senssor.flowMin;
     Serial.print(flow, 3);
     if (senssor.flowUnit == HAF_UNIT_SCCM)
       Serial.print("sccm");

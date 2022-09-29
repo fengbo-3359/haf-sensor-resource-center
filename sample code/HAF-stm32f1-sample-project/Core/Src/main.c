@@ -202,7 +202,7 @@ int main(void)
     }
     else
     {
-      float flow = (senssor.flowMax - senssor.flowMin) * ((float)senssor.flow / 16384 - 0.1) / 0.8 + senssor.flowMin;
+      float flow = (senssor.flowMax - senssor.flowMin) * ((float)senssor.flow / 65535 - 0.1) / 0.8 + senssor.flowMin;
   	  if (senssor.flowUnit == HAF_UNIT_SCCM)
         printf("Flow: %.3fsccm", flow);
 	  else if (senssor.flowUnit == HAF_UNIT_SLM)
