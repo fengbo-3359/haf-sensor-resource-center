@@ -85,7 +85,7 @@ typedef enum {
 typedef struct {
   uint8_t i2cAddress;
   uint8_t sn[4];
-  short flow;
+  uint16_t flow;
   short temp;
   short flowMin;
   short flowMax;
@@ -96,9 +96,9 @@ typedef struct {
 
 int HAF_GetSn(uint8_t address, uint8_t *sn);
 int HAF_SoftReset(uint8_t address);
-int HAF_GetFlow(uint8_t address, short *v);
+int HAF_GetFlow(uint8_t address, uint16_t *v);
 int HAF_GetTemp(uint8_t address, short *v);
-int HAF_GetFlowTemp(uint8_t address, short *f, short *t);
+int HAF_GetFlowTemp(uint8_t address, uint16_t *f, short *t);
 int HAF_LowPower(uint8_t address);
 int HAF_GetFlowMin(uint8_t address, short *v);
 int HAF_GetFlowMax(uint8_t address, short *v);

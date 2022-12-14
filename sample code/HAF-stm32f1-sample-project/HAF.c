@@ -87,14 +87,14 @@ int HAF_SoftReset(uint8_t address)
   return 0;
 }
 
-int HAF_GetFlow(uint8_t address, short *v)
+int HAF_GetFlow(uint8_t address, uint16_t *v)
 {
   HafCmdCode cmd = HAF_CMD_GET_FLOW;
   uint8_t res[4];
   Port_I2cWrite(address, (uint8_t *)&cmd, 1);
   Port_I2cRead(address, res, 4);
   if (HAF_U16CheckSum(res, 2) != HAF_Bytes2uint16(&res[2]))return -1;
-  *v = (short)HAF_Bytes2uint16(res);
+  *v = (uint16_t)HAF_Bytes2uint16(res);
   return 0;
 }
 
@@ -109,14 +109,14 @@ int HAF_GetTemp(uint8_t address, short *v)
   return 0;
 }
 
-int HAF_GetFlowTemp(uint8_t address, short *f, short *t)
+int HAF_GetFlowTemp(uint8_t address, uint16_t *f, short *t)
 {
   HafCmdCode cmd = HAF_CMD_GET_FLOW_TEMP;
   uint8_t res[6];
   Port_I2cWrite(address, (uint8_t *)&cmd, 1);
   Port_I2cRead(address, res, 6);
   if (HAF_U16CheckSum(res, 4) != HAF_Bytes2uint16(&res[4]))return -1;
-  *f = (short)HAF_Bytes2uint16(res);
+  *f = (uint16_t)HAF_Bytes2uint16(res);
   *t = (short)HAF_Bytes2uint16(&res[2]);
   return 0;
 }
